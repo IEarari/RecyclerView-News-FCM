@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.recycler);
         newsList = new ArrayList<>();
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         for(int z = 0; z < 3 ; z++){
         DatabaseReference myRef = database.getReference("results").child(String.valueOf(z)).child("engTitle");
@@ -39,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 // whenever data at this location is updated.
                 String value = dataSnapshot.getValue(String.class);
                 newsList.add(new News(value));
+                adapter.notifyDataSetChanged();
                 Log.d("FBRTDB", "Value is: " + value);
             }
 
@@ -48,10 +48,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("ERR", "Failed to read value.", error.toException());
             }
         });}
-
-        /*for(int x = 0; x < 10 ; x++){
-            newsList.add(new News(String.valueOf(x)));
-        }*/
         adapter = new Adapter(this , newsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
